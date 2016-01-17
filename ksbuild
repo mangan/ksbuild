@@ -1,0 +1,20 @@
+#!/usr/bin/python
+
+
+"""Usage: ksbuild <ks>..."""
+
+import os.path
+
+from docopt import docopt
+import ksbuild
+
+
+args = docopt(__doc__)
+bits = [ksbuild.KickstartBit(ks, open(ks).read()) for ks in args["<ks>"]]
+nr = 1
+for ks in ksbuild.build_kickstarts(bits):
+    print ks._commands
+    while os.path.exists("ksbuild%s.ks" % nr):
+        nr += 1
+    open("ksbuild%s.ks" % nr, "w").write(str(ks))
+    print "Written ksbuild%s.ks" % nr
