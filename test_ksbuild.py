@@ -12,6 +12,7 @@ class TestKickstartBit(unittest.TestCase):
         self.ks3 = ksbuild.KickstartBit("ks3", "autopart")
         self.ks4 = ksbuild.KickstartBit("ks4", "rootpw secret")
         self.ks5 = ksbuild.KickstartBit("ks5", "#;auth\n%packages\n@core")
+        self.ks6 = ksbuild.KickstartBit("ks6", "%include x\n%pre\necho x\necho x > x\n%end")
 
     def test_conflicting_commands(self):
         expected = set(['cmdline', 'graphical', 'vnc', 'text'])
@@ -96,6 +97,31 @@ zerombr
 @core"""
 
         self.assertEqual(str(self.ks2), expected)
+
+        expected = """# ksbuild ks6
+%include x
+
+# ksbuild Mandatory
+autopart
+bootloader --location=mbr
+clearpart --all --initlabel
+keyboard us
+lang en_US.UTF-8
+network --bootproto dhcp
+rootpw anaconda
+selinux --enforcing
+timezone America/New_York
+zerombr
+# ksbuild ks6
+%pre
+echo x
+echo x > x
+%end
+
+# ksbuild Mandatory
+%packages --default
+%end"""
+        self.assertEqual(str(self.ks6), expected)
 
 
 class TestCommandsAndSectionFunc(unittest.TestCase):

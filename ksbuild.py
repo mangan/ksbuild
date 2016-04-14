@@ -134,11 +134,15 @@ def _commands_and_sections(name, body, compact):
             sections += buf
             buf = []
         elif in_section and trimmed.startswith("%"):
-            last = buf.pop()
             sections += buf
-            buf = [last]
+            buf = []
+        elif trimmed.startswith("%include"):
+            commands += buf
+            buf = []
         elif trimmed.startswith("%"):
             in_section = True
+        elif in_section:
+            pass
         elif trimmed[:1].isalpha():
             commands += buf
             buf = []
