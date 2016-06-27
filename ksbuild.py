@@ -76,7 +76,6 @@ class KickstartBit(object):
             self._render()
         return self._body()
 
-
     def _has_packages(self):
         "True if %packages included"
         for line in self._sections:
@@ -179,11 +178,11 @@ def _mandatory_bits(version):
 
 
 def _mutually_exclusive(command):
-    group1 = ["cmdline", "graphical", "text", "vnc"]
-    group2 = ["autopart", "logvol", "part", "raid", "volgroup"]
+    groups = [
+        ["cmdline", "graphical", "text", "vnc"],
+        ["autopart", "logvol", "part", "raid", "volgroup"]]
 
-    if command in group1:
-        return group1
-    if command in group2:
-        return group2
+    for group in groups:
+        if command in group:
+            return group
     return [command]
