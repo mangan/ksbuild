@@ -180,7 +180,8 @@ def _mandatory_bits(version):
 def _mutually_exclusive(command):
     groups = [
         ["cmdline", "graphical", "text", "vnc"],
-        ["autopart", "logvol", "part", "raid", "volgroup"]]
+        ["autopart", "logvol", "part", "raid", "volgroup"],
+        ["halt", "reboot", "poweroff"]]
 
     for group in groups:
         if command in group:
