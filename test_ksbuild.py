@@ -44,6 +44,50 @@ class TestKickstartBit(unittest.TestCase):
         self.assertEqual(self.ks1.included_names(), ("ks1", "ks3"))
         self.assertEqual(self.ks2.included_names(), ("ks2",))
 
+    def test_mandatory_option(self):
+        ks = ksbuild.KickstartBit("ks", "text", mandatory=["reboot"])
+        expected = """# ksbuild ks
+text
+
+# ksbuild Mandatory
+autopart
+bootloader --location=mbr
+clearpart --all --initlabel
+keyboard us
+lang en_US.UTF-8
+network --bootproto dhcp
+rootpw anaconda
+selinux --enforcing
+timezone America/New_York
+zerombr
+reboot
+
+# ksbuild Mandatory
+%packages --default
+%end"""
+	self.assertEqual(str(ks), expected)
+
+        ks = ksbuild.KickstartBit("ks", "poweroff", mandatory=["reboot"])
+        expected = """# ksbuild ks
+poweroff
+
+# ksbuild Mandatory
+autopart
+bootloader --location=mbr
+clearpart --all --initlabel
+keyboard us
+lang en_US.UTF-8
+network --bootproto dhcp
+rootpw anaconda
+selinux --enforcing
+timezone America/New_York
+zerombr
+
+# ksbuild Mandatory
+%packages --default
+%end"""
+	self.assertEqual(str(ks), expected)
+
     def test_str(self):
         expected = """# ksbuild ks1
 graphical

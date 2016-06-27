@@ -5,13 +5,14 @@ class MergeError(Exception): pass
 
 
 class KickstartBit(object):
-    def __init__(self, name, body, version=None, compact=False):
+    def __init__(self, name, body, version=None, compact=False, mandatory=None):
         self._included = []
         if name is not None:
             self._included.append(name)
         self._initial_body = body
         self._version = version
         self._compact = compact
+        self._mandatory = mandatory
 
         self._commands, self._sections = \
             _commands_and_sections(name, body, compact)
@@ -85,7 +86,7 @@ class KickstartBit(object):
         return False
 
     def _render(self):
-        required = _mandatory_bits(self._version)
+        required = _mandatory_bits(self._version, self._mandatory)
         required = [ks for ks in required if not ks.conflicts_with(self)]
         if len(required) > 0:
             selected = required[0]
@@ -161,7 +162,7 @@ def _commands_and_sections(name, body, compact):
     return (commands, sections)
 
 
-def _mandatory_bits(version):
+def _mandatory_bits(version, custom=None):
     mandatory = [
         "autopart",
         "bootloader --location=mbr",
@@ -174,6 +175,8 @@ def _mandatory_bits(version):
         "selinux --enforcing",
         "timezone America/New_York",
         "zerombr"]
+    if custom is not None:
+        mandatory = mandatory + custom
     return [KickstartBit(None, body, compact=True) for body in mandatory]
 
 
