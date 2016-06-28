@@ -163,18 +163,32 @@ def _commands_and_sections(name, body, compact):
 
 
 def _mandatory_bits(version, custom=None):
-    mandatory = [
-        "autopart",
-        "bootloader --location=mbr",
-        "clearpart --all --initlabel",
-        "keyboard us",
-        "lang en_US.UTF-8",
-        "network --bootproto dhcp",
-        "%packages --default\n%end",
-        "rootpw anaconda",
-        "selinux --enforcing",
-        "timezone America/New_York",
-        "zerombr"]
+    if version == "el6":
+        mandatory = [
+            "autopart",
+            "bootloader --location=mbr",
+            "clearpart --all --initlabel",
+            "keyboard us",
+            "lang en_US.UTF-8",
+            "network --bootproto dhcp",
+            "%packages --default\n%end",
+            "rootpw anaconda",
+            "selinux --enforcing",
+            "timezone America/New_York",
+            "zerombr"]
+    else:
+        mandatory = [
+            "autopart",
+            "bootloader --location=mbr --leavebootorder",
+            "clearpart --all --initlabel",
+            "keyboard us",
+            "lang en_US.UTF-8",
+            "network --bootproto dhcp",
+            "%packages --default\n%end",
+            "rootpw anaconda",
+            "selinux --enforcing",
+            "timezone America/New_York",
+            "zerombr"]
     if custom is not None:
         mandatory = mandatory + custom
     return [KickstartBit(None, body, compact=True) for body in mandatory]

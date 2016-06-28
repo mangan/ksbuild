@@ -7,7 +7,7 @@ import ksbuild
 
 class TestKickstartBit(unittest.TestCase):
     def setUp(self):
-        self.ks1 = ksbuild.KickstartBit("ks1", "graphical")
+        self.ks1 = ksbuild.KickstartBit("ks1", "graphical", version="el6")
         self.ks2 = ksbuild.KickstartBit("ks2", "text")
         self.ks3 = ksbuild.KickstartBit("ks3", "autopart")
         self.ks4 = ksbuild.KickstartBit("ks4", "rootpw secret")
@@ -51,7 +51,7 @@ text
 
 # ksbuild Mandatory
 autopart
-bootloader --location=mbr
+bootloader --location=mbr --leavebootorder
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
@@ -73,7 +73,7 @@ poweroff
 
 # ksbuild Mandatory
 autopart
-bootloader --location=mbr
+bootloader --location=mbr --leavebootorder
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
@@ -127,7 +127,7 @@ rootpw secret
 #;auth
 
 # ksbuild Mandatory
-bootloader --location=mbr
+bootloader --location=mbr --leavebootorder
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
@@ -147,7 +147,7 @@ zerombr
 
 # ksbuild Mandatory
 autopart
-bootloader --location=mbr
+bootloader --location=mbr --leavebootorder
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
