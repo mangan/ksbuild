@@ -55,11 +55,11 @@ bootloader --location=mbr --leavebootorder
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
-network --bootproto dhcp
 rootpw anaconda
 selinux --enforcing
 timezone America/New_York
 zerombr
+network --bootproto dhcp
 reboot
 
 # ksbuild Mandatory
@@ -77,11 +77,11 @@ bootloader --location=mbr --leavebootorder
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
-network --bootproto dhcp
 rootpw anaconda
 selinux --enforcing
 timezone America/New_York
 zerombr
+network --bootproto dhcp
 
 # ksbuild Mandatory
 %packages --default
@@ -98,11 +98,11 @@ bootloader --location=mbr
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
-network --bootproto dhcp
 rootpw anaconda
 selinux --enforcing
 timezone America/New_York
 zerombr
+network --bootproto dhcp
 
 # ksbuild Mandatory
 %packages --default
@@ -131,10 +131,10 @@ bootloader --location=mbr --leavebootorder
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
-network --bootproto dhcp
 selinux --enforcing
 timezone America/New_York
 zerombr
+network --bootproto dhcp
 
 # ksbuild ks5
 %packages
@@ -151,11 +151,11 @@ bootloader --location=mbr --leavebootorder
 clearpart --all --initlabel
 keyboard us
 lang en_US.UTF-8
-network --bootproto dhcp
 rootpw anaconda
 selinux --enforcing
 timezone America/New_York
 zerombr
+network --bootproto dhcp
 # ksbuild ks6
 %pre
 echo x

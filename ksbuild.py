@@ -5,7 +5,7 @@ class MergeError(Exception): pass
 
 
 class KickstartBit(object):
-    def __init__(self, name, body, version=None, compact=False, mandatory=None):
+    def __init__(self, name, body, version=None, compact=False, mandatory=None, arch=None):
         self._included = []
         if name is not None:
             self._included.append(name)
@@ -13,6 +13,7 @@ class KickstartBit(object):
         self._version = version
         self._compact = compact
         self._mandatory = mandatory
+        self._arch = arch
 
         self._commands, self._sections = \
             _commands_and_sections(name, body, compact)
@@ -86,7 +87,7 @@ class KickstartBit(object):
         return False
 
     def _render(self):
-        required = _mandatory_bits(self._version, self._mandatory)
+        required = _mandatory_bits(self._version, self._arch, self._mandatory)
         required = [ks for ks in required if not ks.conflicts_with(self)]
         if len(required) > 0:
             selected = required[0]
@@ -162,7 +163,7 @@ def _commands_and_sections(name, body, compact):
     return (commands, sections)
 
 
-def _mandatory_bits(version, custom=None):
+def _mandatory_bits(version, arch, custom=None):
     if version == "el6":
         mandatory = [
             "autopart",
@@ -170,7 +171,6 @@ def _mandatory_bits(version, custom=None):
             "clearpart --all --initlabel",
             "keyboard us",
             "lang en_US.UTF-8",
-            "network --bootproto dhcp",
             "%packages --default\n%end",
             "rootpw anaconda",
             "selinux --enforcing",
@@ -183,12 +183,13 @@ def _mandatory_bits(version, custom=None):
             "clearpart --all --initlabel",
             "keyboard us",
             "lang en_US.UTF-8",
-            "network --bootproto dhcp",
             "%packages --default\n%end",
             "rootpw anaconda",
             "selinux --enforcing",
             "timezone America/New_York",
             "zerombr"]
+    if arch != "s390x":
+        mandatory.append("network --bootproto dhcp")
     if custom is not None:
         mandatory = mandatory + custom
     return [KickstartBit(None, body, compact=True) for body in mandatory]
